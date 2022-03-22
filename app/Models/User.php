@@ -23,7 +23,13 @@ class User extends Authenticatable
         'email',
         'password',
         'phonenumber',
+        'moneyspent',
+        'distancetraveld',
     ];
+    public function CarRequests()
+    {
+        return $this->hasMany(CarRequests::class);
+    }
 
     /**
      * The attributes that should be hidden for serialization.

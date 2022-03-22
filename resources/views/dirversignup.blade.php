@@ -1,3 +1,4 @@
+<body>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;900&display=swap');
 
@@ -6,14 +7,14 @@
     body {
     margin: 0;
     /*width: 100vw;*/
-    /*height: 100vh;*/
+    /* height: 120vh; */
     background: #ecf0f3;
     display: flex;
     align-items: center;
     text-align: center;
     justify-content: center;
     place-items: center;
-    overflow: hidden;
+    overflow: visible;
     font-family: poppins;
     }
 
@@ -118,7 +119,7 @@
 
 
     <div class="container">
-    <form action="{{route('register')}}" method="POST">
+    <form action="{{route('driverrigester')}}" method="POST">
        @if (Session::get('success'))
             <div>{{session::get('success')}}</div>
        @endif
@@ -140,9 +141,16 @@
             <label>PASSWORD</label>
             <input type="password" placeholder="Min 6 charaters long" name="password" />
             <span class="text-danger">@error('password'){{$message}}@enderror</span>
+            <label>National ID</label>
+            <input type="text" placeholder="Your national id" name="ssn" value="{{old('ssn')}}"/>
+            <span class="text-danger">@error('ssn'){{$message}}@enderror</span>
+            <label>licenseplate number</label>
+            <input type="text" placeholder="Your plate number" name="licenseplatenumber" value="{{old('licenseplatenumber')}}"/>
+            <span class="text-danger">@error('licenseplatenumber'){{$message}}@enderror</span>
             <button type="submit">Signup</button>
 
         </div>
     </form>
-    <a href="{{route('driversignup')}}" style="text-decoration: none"><button>Signup as a driver</button></a>
+    <a href="{{route('signup')}}" style="text-decoration: none"><button>Signup as a user</button></a>
     </div>
+</body>

@@ -16,7 +16,7 @@ class authcheck
      */
     public function handle(Request $request, Closure $next)
     {
-        if(!session()->has('loggeduser') && ($request->path() != 'login' &&  $request->path() != 'signup')){
+        if(!session()->has('loggeduser') && ($request->path() != 'login' &&  $request->path() != 'signup' && $request->path() != 'driversignup'  )){
             return redirect('/login')->with('fail','You must login first');
         }
 

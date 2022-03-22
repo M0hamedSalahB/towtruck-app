@@ -1,9 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Models\Driver;
 use App\Models\User;
 use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 use function PHPUnit\Framework\returnArgument;
 
@@ -20,12 +23,26 @@ class loginController extends Controller
            'email'=>'required|email',
            'password'=>'required|min:6',
         ]);
+        if ($request->email=='Admin@admin.com'&&$request->password=='Adminpass') {
+            return redirect('admindashboard');
+        }
 
         $userinfo=User::where('email','=',$request->email)->first();
         if (!$userinfo) {
-            return back()->with('fail','email dose not exist');
+                $userinfo=Driver::where('email','=',$request->email)->first();
+            if (!$userinfo) {
+                return back()->with('fail','email dose not exist');
+            }elseif (Hash::check($request->password,$userinfo->password )) {
+
+                    $request->session()->put('loggeduser',$userinfo);
+                    return redirect('dashboard');
+            }else {
+                    return back()->with('fail','Password in incorect');
+
+             }
+
         }else {
-            if ($request->password==$userinfo->password) {
+            if (Hash::check($request->password,$userinfo->password )) {
                 $request->session()->put('loggeduser',$userinfo);
                 return redirect('dashboard');
             }else {
@@ -33,6 +50,7 @@ class loginController extends Controller
 
             }
         }
+
     }
 
 }

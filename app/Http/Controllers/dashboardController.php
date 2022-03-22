@@ -1,9 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Models\Driver;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use SebastianBergmann\Environment\Console;
 
@@ -28,8 +30,8 @@ class dashboardController extends Controller
             if ($request->input('email')!=session('loggeduser')['email']&&$request->input('phonenumber')!=session('loggeduser')['phonenumber']) {
                 $request->validate([
                     'name'=>'required',
-                    'email'=>'required|email|unique:users',
-                    'phonenumber'=>'required|starts_with:0|digits:11|unique:users',
+                    'email'=>'required|email|unique:users|unique:drivers',
+                    'phonenumber'=>'required|starts_with:0|digits:11|unique:users|unique:drivers',
                     'password'=>'required|min:6',
                 ]);
             }
@@ -50,7 +52,7 @@ class dashboardController extends Controller
                 $request->validate([
                     'name'=>'required',
                     'email'=>'required|email',
-                    'phonenumber'=>'required|starts_with:0|digits:11|unique:users',
+                    'phonenumber'=>'required|starts_with:0|digits:11|unique:users|unique:drivers',
                     'password'=>'required|min:6',
                 ]);
 
@@ -69,12 +71,25 @@ class dashboardController extends Controller
                                         'name'=>$request->input('name'),
                                         'email'=>$request->input('email'),
                                         'phonenumber'=>$request->input('phonenumber'),
-                                        'password'=>$request->input('password'),
+                                        'password'=>Hash::make($request->input('password')),
+                                    ]);
+        $driverupdating= DB::table('drivers')->where('id','=',$request->input('userid'))
+                                    ->update([
+                                        'name'=>$request->input('name'),
+                                        'email'=>$request->input('email'),
+                                        'phonenumber'=>$request->input('phonenumber'),
+                                        'password'=>Hash::make($request->input('password')),
                                     ]);
 
         session()->pull('loggeduser');
         $userinfo=User::where('email','=',$request->email)->first();
-        $request->session()->put('loggeduser',$userinfo);
+        if (!$userinfo) {
+            $userinfo=Driver::where('email','=',$request->email)->first();
+            $request->session()->put('loggeduser',$userinfo);
+        }else {
+            $request->session()->put('loggeduser',$userinfo);
+        }
+
 
 
         return redirect('dashboard');

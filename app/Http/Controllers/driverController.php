@@ -3,45 +3,52 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
-use Illuminate\Support\Facades\Date;
+use App\Models\Driver;
 use Illuminate\Support\Facades\Hash;
 
-class signupController extends Controller
+class driverController extends Controller
 {
-    public function signup()
+     public function driversignup()
     {
-        return view("signup");
+        return view('dirversignup');
     }
-    public function register(Request $request)
+
+    public function driverrigester(Request $request)
     {
+
+
         //validation
         $request->validate([
             'name'=>'required',
             'email'=>'required|email|unique:users',
             'phonenumber'=>'required|starts_with:0|digits:11|unique:users',
             'password'=>'required|min:6',
+            'ssn'=>'required|digits:14',
+            'licenseplatenumber'=>'required',
 
         ]);
 
         //insert
 
-        $user = new User;
+        $user = new Driver;
         $user->name=$request->name;
         $user->email=$request->email;
         $user->phonenumber=$request->phonenumber;
         $user->password=Hash::make($request->password);
-        $user->moneyspent=0;
+        $user->moneymade=0;
         $user->distancetraveld=0;
+        $user->ssn=$request->ssn;
+        $user->licenseplatenumber=$request->licenseplatenumber;
         $save =$user->save();
 
 
         if ($save) {
-            $userinfo=User::where('email','=',$request->email)->first();
+            $userinfo=Driver::where('email','=',$request->email)->first();
             $request->session()->put('loggeduser',$userinfo);
             return redirect('dashboard');
         }else {
             return back()->with('fail','Please try again');
         }
+
     }
 }

@@ -249,7 +249,7 @@
                 <a href="{{route('login')}}">Login</a>
                 <a href="{{route('signup')}}">Register</a>
                 @endif
-                ?>php
+                ?>
                 <a href="#">Home</a>
                 <a href="#">About</a>
                 <a href="#">Contact</a>

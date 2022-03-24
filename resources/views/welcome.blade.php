@@ -241,7 +241,7 @@
             <h2> <a href="#" class="logo"><img src="{{ asset('img/application logo-01.png') }}" style="width: 10vw" alt="Logo"></a></h2>
 
             <div class="navigation">
-            <?php
+            
                 @if (session()->has('loggeduser'))
                 <a href="{{route('dashboard')}}">{{session('loggeduser')['email']}}</a>
                 <a href="{{route('logout')}}">logout</a>
@@ -249,7 +249,7 @@
                 <a href="{{route('login')}}">Login</a>
                 <a href="{{route('signup')}}">Register</a>
                 @endif
-                ?>
+                
                 <a href="#">Home</a>
                 <a href="#">About</a>
                 <a href="#">Contact</a>
